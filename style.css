@@ -290,7 +290,7 @@ body {
 /* 長考ボタンの絶対位置（西スコアの右下に重ねる） */
 #btn-choukou {
     position: absolute;
-    left: 70%;
+    left: 66%;
     top: 71%;
     margin-top: 0;
     margin-left: 0;
@@ -497,6 +497,33 @@ body {
     background: #007bff;
     color: #fff;
 }
+#start-timer-btn {
+    background: #fff;
+    color: #333;
+    border: 2px solid #f70000;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.15s, color 0.15s;
+    margin-left: 10px;
+}
+#start-timer-btn:hover {
+    background: #f70000;
+    color: #fff;
+}
+#stop-timer-btn {
+    background: #fff;
+    color: #333;
+    border: 2px solid #357b00;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.15s, color 0.15s;
+    margin-left: 10px;
+}
+#stop-timer-btn:hover {
+    background: #357b00;
+    color: #fff;
+}
+
 .controls input {
     font-size: 16px;
     width: 60px;
