@@ -311,9 +311,8 @@ body {
 
 #score-rotate-area {
     position: absolute;
-    width: 100%;
+    width: 110%;
     height: 100%;
-    top: 0; left: 0;
     transition: transform 0.5s ease-in-out;
 }
 
