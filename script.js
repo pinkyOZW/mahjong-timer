@@ -75,14 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setActiveWind(windIndex);
     });
 
-    // タイマー表示部クリックでタイマーリセット＋赤字進行
+    // タイマー表示部クリックでタイマーリセット＋赤字進行（東→南→西→北→東ループ）
     timerDisplay.addEventListener('click', () => {
-        // 風を進める（南→西→北→南ループ）
         windIndex++;
-        if (windIndex > 3) windIndex = 1; // 1:南, 2:西, 3:北, 南→西→北→南
+        if (windIndex > 3) windIndex = 0; // 0:東, 1:南, 2:西, 3:北
         setActiveWind(windIndex);
 
-        // タイマーリセット
         const initialSeconds = parseInt(timerSettingInput.value, 10);
         socket.emit('resetTimer', initialSeconds);
     });
