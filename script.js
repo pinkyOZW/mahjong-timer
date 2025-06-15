@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const choukouSettingInput = document.getElementById('choukou-setting');
     const startTimerBtn = document.getElementById('start-timer-btn');
     const stopTimerBtn = document.getElementById('stop-timer-btn');
+    const resetScoreBtn = document.getElementById('reset-score-btn'); // 追加
     const btnChoukou = document.getElementById('btn-choukou');
     const timerContainer = document.getElementById('timer-container'); // 追加
     const body = document.body;
@@ -145,6 +146,19 @@ document.addEventListener('DOMContentLoaded', () => {
         windIndex = 0;
         setActiveWind(windIndex);
     });
+
+    // 点数リセットボタンが押されたら点数を全員25000点に
+    if (resetScoreBtn) {
+        resetScoreBtn.addEventListener('click', () => {
+            const defaultScores = {
+                east: 25000,
+                south: 25000,
+                west: 25000,
+                north: 25000,
+            };
+            socket.emit('resetScore', defaultScores);
+        });
+    }
 
     // 点数が変更されたら、サーバーに通知
     Object.values(scoreInputs).forEach(input => {

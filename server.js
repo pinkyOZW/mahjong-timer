@@ -120,6 +120,18 @@ io.on('connection', (socket) => {
         io.emit('stateUpdate', gameState);
     });
 
+    // 点数リセット
+    socket.on('resetScore', (defaultScores) => {
+        console.log('score reset requested');
+        gameState.scores = {
+            east: 25000,
+            south: 25000,
+            west: 25000,
+            north: 25000,
+        };
+        io.emit('stateUpdate', gameState);
+    });
+
     // ポップアップを閉じる要求
     socket.on('closeTimeupPopup', () => {
         if (isTimeupPopupShown) {
