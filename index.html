@@ -8,6 +8,23 @@
 </head>
 <body>
 
+    <!-- 役一覧ボタン（左上） -->
+    <button id="yaku-list-btn" class="yaku-list-btn">役一覧</button>
+    <!-- 役一覧ポップアップ -->
+    <div id="yaku-popup" class="yaku-popup-overlay">
+        <div class="yaku-popup-content">
+            <button id="yaku-popup-close" class="yaku-popup-close">&times;</button>
+            <div class="yaku-popup-pages">
+                <img id="yaku-image" src="image1" alt="麻雀役一覧" />
+            </div>
+            <div class="yaku-popup-pagination">
+                <button id="page-prev" class="page-btn" disabled>&lt;</button>
+                <span id="page-indicator">1 / 2</span>
+                <button id="page-next" class="page-btn">&gt;</button>
+            </div>
+        </div>
+    </div>
+
     <div id="game-board">
         <div id="score-rotate-area">
             <div class="player-score south">

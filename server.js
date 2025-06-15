@@ -2,6 +2,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -9,6 +10,14 @@ const io = new Server(server);
 
 // 公開するフォルダを指定
 app.use(express.static(__dirname));
+
+// 役一覧画像のルーティング（img/yaku1.png, img/yaku2.png を配置すること）
+app.get('/image1', (req, res) => {
+    res.sendFile(path.join(__dirname, 'img', 'yaku1.png'));
+});
+app.get('/image2', (req, res) => {
+    res.sendFile(path.join(__dirname, 'img', 'yaku2.png'));
+});
 
 // サーバーの記憶領域（これが全員で共有されるデータ）
 let gameState = {

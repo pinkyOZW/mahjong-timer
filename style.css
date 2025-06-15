@@ -16,6 +16,110 @@ body {
     background-color: #f0f0f0;
 }
 
+/* === 役一覧ボタン・ポップアップ === */
+
+.yaku-list-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    background: #fff;
+    border: 2px solid #333;
+    color: #333;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 1001;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: background 0.2s;
+}
+.yaku-list-btn:hover {
+    background: #f3f3f3;
+}
+
+.yaku-popup-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.yaku-popup-overlay.active {
+    display: flex;
+}
+
+.yaku-popup-content {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px 24px 16px 24px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    min-width: 360px;
+    position: relative;
+    max-width: 98vw;
+    max-height: 94vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.yaku-popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+}
+.yaku-popup-close:hover {
+    background: #f0f0f0;
+}
+
+.yaku-popup-pages img {
+    max-width: 400px;
+    max-height: 60vh;
+    display: block;
+    margin: 0 auto 12px auto;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.yaku-popup-pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+.page-btn {
+    background: #eee;
+    color: #333;
+    border: 1px solid #888;
+    border-radius: 4px;
+    width: 32px; height: 32px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.page-btn:disabled {
+    background: #f9f9f9;
+    color: #bbb;
+    cursor: default;
+}
+#page-indicator {
+    font-size: 15px;
+    font-weight: bold;
+}
+
 /* --- タイムアップポップアップ --- */
 .popup-timeup {
     position: fixed;

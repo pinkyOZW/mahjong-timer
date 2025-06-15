@@ -162,4 +162,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初期視点
     setPlayerView('north');
+
+    // --- 役一覧ポップアップ機能の追加 ---
+    const yakuListBtn = document.getElementById('yaku-list-btn');
+    const popupOverlay = document.getElementById('yaku-popup');
+    const popupCloseBtn = document.getElementById('yaku-popup-close');
+    const yakuImg = document.getElementById('yaku-image');
+    const pagePrevBtn = document.getElementById('page-prev');
+    const pageNextBtn = document.getElementById('page-next');
+    const pageIndicator = document.getElementById('page-indicator');
+
+    // 画像名はサーバーでルーティングされているものと一致させる
+    const yakuImages = ["image1", "image2"];
+    let currentPage = 0;
+
+    yakuListBtn.addEventListener('click', () => {
+        popupOverlay.style.display = 'flex';
+        showPage(0);
+    });
+
+    popupCloseBtn.addEventListener('click', () => {
+        popupOverlay.style.display = 'none';
+    });
+
+    pagePrevBtn.addEventListener('click', () => {
+        if (currentPage > 0) showPage(currentPage - 1);
+    });
+    pageNextBtn.addEventListener('click', () => {
+        if (currentPage < yakuImages.length - 1) showPage(currentPage + 1);
+    });
+
+    function showPage(idx) {
+        currentPage = idx;
+        yakuImg.src = yakuImages[currentPage];
+        pageIndicator.textContent = (currentPage + 1) + ' / ' + yakuImages.length;
+        pagePrevBtn.disabled = currentPage === 0;
+        pageNextBtn.disabled = currentPage === yakuImages.length - 1;
+    }
+
+    popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) {
+            popupOverlay.style.display = 'none';
+        }
+    });
 });
