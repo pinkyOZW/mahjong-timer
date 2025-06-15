@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetTimerBtn = document.getElementById('reset-timer-btn');
     const stopTimerBtn = document.getElementById('stop-timer-btn');
     const body = document.body;
-    
+
     const scoreInputs = {
         east: document.getElementById('score-east'),
         south: document.getElementById('score-south'),
@@ -22,6 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnWest = document.getElementById('btn-west');
     const btnNorth = document.getElementById('btn-north');
 
+    // 風ラベル
+    const windLabels = [
+        document.getElementById('label-east'),
+        document.getElementById('label-south'),
+        document.getElementById('label-west'),
+        document.getElementById('label-north'),
+    ];
+    let windIndex = 0; // 0:東, 1:南, 2:西, 3:北
+    let windProgressInterval = null;
+
+    // 赤字クラス切替
+    function setActiveWind(index) {
+        windLabels.forEach((el, i) => {
+            if (el) {
+                if (i === index) {
+                    el.classList.add('active-wind');
+                } else {
+                    el.classList.remove('active-wind');
+                }
+            }
+        });
+    }
+
+    // 初期状態で東を赤字
+    setActiveWind(0);
+
     socket.on('stateUpdate', (gameState) => {
         // 点数を画面に反映
         scoreInputs.east.value = gameState.scores.east;
@@ -33,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const seconds = gameState.timer.secondsLeft;
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
-        timerDisplay.textContent = 
+        timerDisplay.textContent =
             `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-        
+
         // タイマー設定値も同期
         timerSettingInput.value = gameState.timer.initialSeconds;
     });
@@ -44,11 +70,24 @@ document.addEventListener('DOMContentLoaded', () => {
     resetTimerBtn.addEventListener('click', () => {
         const newInitialSeconds = parseInt(timerSettingInput.value, 10);
         socket.emit('resetTimer', newInitialSeconds);
+
+        // 風の進行を南→西→北で進める
+        windIndex = 1;
+        setActiveWind(windIndex);
+        if (windProgressInterval) clearInterval(windProgressInterval);
+        windProgressInterval = setInterval(() => {
+            windIndex++;
+            if (windIndex > 3) windIndex = 1; // 南→西→北ループ
+            setActiveWind(windIndex);
+        }, 1000);
     });
 
-    // ストップボタンが押されたらサーバーに通知
+    // 終了ボタンが押されたらサーバーに通知＆東を赤字に戻す
     stopTimerBtn.addEventListener('click', () => {
         socket.emit('stopTimer');
+        if (windProgressInterval) clearInterval(windProgressInterval);
+        windIndex = 0;
+        setActiveWind(windIndex);
     });
 
     // 点数が変更されたら、サーバーに通知

@@ -81,9 +81,13 @@ body {
     text-align: center;
     width: 100%;
     margin-bottom: 5px;
-    display: flex;             /* 追加 */
-    justify-content: center;   /* 追加 */
-    align-items: center;       /* 追加 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wind-label.active-wind {
+    color: red;
 }
 
 /* 点数入力 */
