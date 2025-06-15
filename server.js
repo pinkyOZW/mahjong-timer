@@ -32,13 +32,14 @@ function runTimer() {
     if (timerInterval) clearInterval(timerInterval);
 
     timerInterval = setInterval(() => {
-        if (gameState.timer.secondsLeft > 0) {
+        if (gameState.timer.secondsLeft > 0 && gameState.timer.isRunning) {
             gameState.timer.secondsLeft--;
             // 状態が変わったので全員に通知
             io.emit('stateUpdate', gameState);
         } else {
             gameState.timer.isRunning = false;
             clearInterval(timerInterval);
+            io.emit('stateUpdate', gameState); // 0秒になったら更新
         }
     }, 1000);
 }
@@ -61,11 +62,19 @@ io.on('connection', (socket) => {
         io.emit('stateUpdate', gameState);
     });
 
-    // タイマーストップの要求を受け取った時の処理（追加）
+    // タイマーストップの要求を受け取った時の処理
     socket.on('stopTimer', () => {
         console.log('timer stop requested');
         gameState.timer.isRunning = false;
         clearInterval(timerInterval);
+        // 状態が変わったので全員に通知
+        io.emit('stateUpdate', gameState);
+    });
+
+    // 長考ボタンでタイマーに追加時間を加算
+    socket.on('addTime', (addSeconds) => {
+        // 残り時間にaddSecondsを加算
+        gameState.timer.secondsLeft += addSeconds;
         // 状態が変わったので全員に通知
         io.emit('stateUpdate', gameState);
     });
