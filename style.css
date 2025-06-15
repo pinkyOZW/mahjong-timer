@@ -303,6 +303,12 @@ body {
     border: 5px solid black;
     box-sizing: border-box;
     background-color: white;
+    transition: background 0.3s, border-color 0.3s;
+}
+/* タイマー危険状態（残り10秒） */
+#timer-container.timer-danger {
+    background-color: #ffdddd !important;
+    border-color: #d00 !important;
 }
 
 #timer-display {

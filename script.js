@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startTimerBtn = document.getElementById('start-timer-btn');
     const stopTimerBtn = document.getElementById('stop-timer-btn');
     const btnChoukou = document.getElementById('btn-choukou');
+    const timerContainer = document.getElementById('timer-container'); // 追加
     const body = document.body;
 
     const scoreInputs = {
@@ -93,6 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // タイマー設定値も同期
         timerSettingInput.value = gameState.timer.initialSeconds;
+
+        // --- 追加：残り10秒で背景色を赤に ---
+        if (seconds <= 10 && gameState.timer.isRunning) {
+            timerContainer.classList.add('timer-danger');
+        } else {
+            timerContainer.classList.remove('timer-danger');
+        }
+        // ------------------------------------
     });
 
     // ポップアップ表示・非表示の同期
