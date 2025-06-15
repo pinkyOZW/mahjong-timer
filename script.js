@@ -33,6 +33,34 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     let windIndex = 0; // 0:東, 1:南, 2:西, 3:北
 
+    // ポップアップ表示・非表示制御
+    function showTimeupPopup() {
+        if (document.getElementById('timeup-popup')) return; // 既に表示中は何もしない
+        const popup = document.createElement('div');
+        popup.id = 'timeup-popup';
+        popup.className = 'popup-timeup';
+        popup.innerHTML = '<span>タイムアップ！</span>';
+        document.body.appendChild(popup);
+
+        // タップで消す（どこをタップしても消える）
+        setTimeout(() => {
+            document.addEventListener('pointerdown', closePopupHandler, true);
+        }, 0);
+    }
+    function hideTimeupPopup() {
+        const popup = document.getElementById('timeup-popup');
+        if (popup) {
+            popup.parentNode.removeChild(popup);
+            document.removeEventListener('pointerdown', closePopupHandler, true);
+        }
+    }
+    function closePopupHandler(e) {
+        socket.emit('closeTimeupPopup');
+        // ポップアップはサーバーからの指示で消すのでここでは消さない
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
     // 赤字クラス切替
     function setActiveWind(index) {
         windLabels.forEach((el, i) => {
@@ -67,6 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
         timerSettingInput.value = gameState.timer.initialSeconds;
     });
 
+    // ポップアップ表示・非表示の同期
+    socket.on('timeupPopup', (isShow) => {
+        if (isShow) {
+            showTimeupPopup();
+        } else {
+            hideTimeupPopup();
+        }
+    });
+
     // タイマースタートボタン押下でタイマー開始（赤字は東のまま）
     startTimerBtn.addEventListener('click', () => {
         const initialSeconds = parseInt(timerSettingInput.value, 10);
@@ -90,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 長考ボタン押下でタイマーに+設定値秒
     btnChoukou.addEventListener('click', () => {
         const addSeconds = parseInt(choukouSettingInput.value, 10) || 60;
-        socket.emit('addTime', addSeconds); // サーバー側で+addSeconds加算する処理が必要
+        socket.emit('addTime', addSeconds);
     });
 
     // 終了ボタンが押されたらサーバーに通知＆東を赤字に戻す
@@ -115,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 視点切り替え（自分の画面だけでOKなのでサーバー通信なし）
     const setPlayerView = (wind) => {
-        body.className = ''; // いったんクラスをリセット
+        body.className = '';
         body.classList.add(`view-${wind}`);
     };
     btnEast.addEventListener('click', () => setPlayerView('east'));

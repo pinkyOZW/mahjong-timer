@@ -26,6 +26,7 @@ let gameState = {
 };
 
 let timerInterval = null;
+let isTimeupPopupShown = false; // ポップアップの表示状態
 
 // タイマーのカウントダウン処理
 function runTimer() {
@@ -34,66 +35,84 @@ function runTimer() {
     timerInterval = setInterval(() => {
         if (gameState.timer.secondsLeft > 0 && gameState.timer.isRunning) {
             gameState.timer.secondsLeft--;
-            // 状態が変わったので全員に通知
             io.emit('stateUpdate', gameState);
         } else {
             gameState.timer.isRunning = false;
             clearInterval(timerInterval);
             io.emit('stateUpdate', gameState); // 0秒になったら更新
+
+            // タイムアップポップアップを全員に表示
+            if (!isTimeupPopupShown) {
+                isTimeupPopupShown = true;
+                io.emit('timeupPopup', true);
+            }
         }
     }, 1000);
 }
 
-// 誰かがサイトに接続してきた時の処理
 io.on('connection', (socket) => {
     console.log('a user connected');
 
     // 接続してきた人に現在の状態を送る
     socket.emit('stateUpdate', gameState);
 
-    // タイマーリセットの要求を受け取った時の処理
+    // 初期のポップアップ状態も送る
+    socket.emit('timeupPopup', isTimeupPopupShown);
+
     socket.on('resetTimer', (newInitialSeconds) => {
         console.log('timer reset requested');
         gameState.timer.initialSeconds = newInitialSeconds;
         gameState.timer.secondsLeft = newInitialSeconds;
         gameState.timer.isRunning = true;
         runTimer();
-        // 状態が変わったので全員に通知
+
+        // タイマーリセット時はポップアップ非表示に
+        if (isTimeupPopupShown) {
+            isTimeupPopupShown = false;
+            io.emit('timeupPopup', false);
+        }
+
         io.emit('stateUpdate', gameState);
     });
 
-    // タイマーストップの要求を受け取った時の処理
     socket.on('stopTimer', () => {
         console.log('timer stop requested');
         gameState.timer.isRunning = false;
         clearInterval(timerInterval);
-        // 状態が変わったので全員に通知
+
+        // タイマー停止時もポップアップ非表示に
+        if (isTimeupPopupShown) {
+            isTimeupPopupShown = false;
+            io.emit('timeupPopup', false);
+        }
+
         io.emit('stateUpdate', gameState);
     });
 
-    // 長考ボタンでタイマーに追加時間を加算
     socket.on('addTime', (addSeconds) => {
-        // 残り時間にaddSecondsを加算
         gameState.timer.secondsLeft += addSeconds;
-        // 状態が変わったので全員に通知
         io.emit('stateUpdate', gameState);
     });
 
-    // 点数更新の要求を受け取った時の処理
     socket.on('updateScore', (newScores) => {
         console.log('score update requested');
         gameState.scores = newScores;
-        // 状態が変わったので全員に通知
         io.emit('stateUpdate', gameState);
     });
 
-    // 接続が切れた時の処理
+    // ポップアップを閉じる要求
+    socket.on('closeTimeupPopup', () => {
+        if (isTimeupPopupShown) {
+            isTimeupPopupShown = false;
+            io.emit('timeupPopup', false);
+        }
+    });
+
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
 });
 
-// サーバーを起動
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

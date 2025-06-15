@@ -16,6 +16,35 @@ body {
     background-color: #f0f0f0;
 }
 
+/* --- タイムアップポップアップ --- */
+.popup-timeup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadein 0.2s;
+}
+.popup-timeup span {
+    background: #fff;
+    color: #d00;
+    font-size: 3rem;
+    font-weight: bold;
+    border: 4px solid #d00;
+    border-radius: 18px;
+    padding: 38px 100px;
+    box-shadow: 0 4px 24px #0008;
+    letter-spacing: 0.15em;
+    text-align: center;
+    user-select: none;
+}
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* board/timer layout */
 #game-board {
     position: relative;
