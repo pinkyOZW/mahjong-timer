@@ -419,6 +419,43 @@ body {
     letter-spacing: 0.03em;
     margin: 0;
 }
+
+/* 東南西北ボタン横並び均等配置・均一サイズ */
+.wind-select-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+    margin-top: 10px;
+    justify-content: center;
+}
+.wind-btn {
+    flex: 1 1 0;
+    min-width: 60px;
+    max-width: 90px;
+    text-align: center;
+    background: #fff;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    color: #40310a;
+    font-size: 1.12em;
+    font-weight: bold;
+    padding: 8px 0;
+    box-shadow: 0 2px 6px rgba(60,40,10,0.08);
+    transition: border 0.2s, background 0.2s;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    letter-spacing: 0.14em;
+}
+.wind-btn.active, .wind-btn.selected {
+    background: linear-gradient(90deg, #ffe796 80%, #fff 100%);
+    border: 3px solid #d4af37;
+    color: #a67c00;
+    box-shadow: 0 4px 16px rgba(200,180,50,0.11);
+}
+
 #reset-score-btn {
     background: #fff;
     color: #333;
