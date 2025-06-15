@@ -215,8 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreTableNext = document.getElementById('score-table-page-next');
     const scoreTableIndicator = document.getElementById('score-table-page-indicator');
 
-    // 画像ファイル名（image1, image2, image3）
-    const scoreTableImages = ["image1", "image2", "image3"];
+    // 画像ファイル名（image3, image4, image5）
+    const scoreTableImages = ["image3", "image4", "image5"];
     let scoreTablePage = 0;
 
     function showScoreTablePage(idx) {
