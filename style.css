@@ -396,15 +396,28 @@ body {
 /* コントロールエリア */
 .controls {
     margin-top: 20px;
-    text-align: center;
-    padding: 10px;
-    background-color: white;
-    border-radius: 10px;
+    text-align: left;
+    padding: 22px 18px 20px 18px;
+    background: linear-gradient(135deg, #1e4d2b 92%, #4b6e3b 100%);
+    border: 2px solid #d4af37;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(60,40,10,0.13);
+    color: #fffbe8;
+    font-size: 1.08em;
+    position: relative;
 }
 .controls button {
-    font-size: 16px;
-    padding: 5px 15px;
-    margin: 0 5px;
+    flex: 1;
+    padding: 14px 0;
+    font-size: 1.08em;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 3px 8px rgba(60,40,10,0.13);
+    cursor: pointer;
+    transition: background 0.16s;
+    letter-spacing: 0.03em;
+    margin: 0;
 }
 #reset-score-btn {
     background: #fff;
