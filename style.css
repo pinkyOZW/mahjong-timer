@@ -21,7 +21,29 @@ body {
     position: relative;
     width: var(--board-size);
     height: var(--board-size);
-    /* transform指定はscore-rotate-areaに移動 */
+}
+
+/* 長考ボタンの絶対位置（西スコアの右下に重ねる） */
+#btn-choukou {
+    position: absolute;
+    left: 66%;
+    top: 71%;
+    margin-top: 0;
+    margin-left: 0;
+    font-size: 1.4rem;
+    color: #d00;
+    background: #fff;
+    border: 2px solid #d00;
+    border-radius: 4px;
+    padding: 2px 16px;
+    font-family: 'serif';
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    box-shadow: 0 0 2px #d00;
+    cursor: pointer;
+    writing-mode: horizontal-tb;
+    z-index: 10;
+    /* 必要に応じて微調整 */
 }
 
 #score-rotate-area {
@@ -51,8 +73,6 @@ body {
 #timer-display {
     font-size: var(--font-size-large);
     font-weight: bold;
-    /* タイマーの回転を0度にする */
-    /* transform: rotate(-90deg); */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,6 +120,23 @@ body {
     border-radius: 5px;
     padding: 5px;
     box-sizing: border-box;
+}
+
+/* タイマー/長考設定の横並び */
+.timer-settings-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.timer-settings-row label {
+    font-size: 16px;
+}
+.timer-settings-row input[type="number"] {
+    font-size: 16px;
+    width: 60px;
+    padding: 5px;
 }
 
 /* 回転は内側のscore-innerで打ち消す */

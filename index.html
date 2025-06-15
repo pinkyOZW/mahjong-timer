@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="player-score west">
-                <div class="score-inner">
+                <div class="score-inner west-inner">
                     <span class="wind-label" data-wind="西" id="label-west">西</span>
                     <input type="number" class="score-input" value="25000" id="score-west">
                 </div>
@@ -39,6 +39,9 @@
         <div id="timer-container">
             <div id="timer-display">00:30</div>
         </div>
+
+        <!-- 長考ボタンをscore-rotate-areaの外、西の下あたりに配置 -->
+        <button id="btn-choukou">長考</button>
     </div>
 
     <div class="controls">
@@ -48,10 +51,14 @@
         <button id="btn-west">西</button>
         <button id="btn-north">北</button>
         <hr>
-        <p>タイマー設定 (秒):</p>
-        <input type="number" id="timer-setting" value="30" min="1">
-        <button id="start-timer-btn">対局開始</button>
-        <button id="stop-timer-btn">対局終了</button>
+        <div class="timer-settings-row">
+            <label for="timer-setting">タイマー設定 (秒):</label>
+            <input type="number" id="timer-setting" value="30" min="1">
+            <label for="choukou-setting" style="margin-left:12px;">長考設定 (秒):</label>
+            <input type="number" id="choukou-setting" value="60" min="1">
+        </div>
+        <button id="start-timer-btn">タイマースタート</button>
+        <button id="stop-timer-btn">終了</button>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>

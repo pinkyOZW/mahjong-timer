@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // HTML要素を取得
     const timerDisplay = document.getElementById('timer-display');
     const timerSettingInput = document.getElementById('timer-setting');
+    const choukouSettingInput = document.getElementById('choukou-setting');
     const startTimerBtn = document.getElementById('start-timer-btn');
     const stopTimerBtn = document.getElementById('stop-timer-btn');
+    const btnChoukou = document.getElementById('btn-choukou');
     const body = document.body;
 
     const scoreInputs = {
@@ -83,6 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const initialSeconds = parseInt(timerSettingInput.value, 10);
         socket.emit('resetTimer', initialSeconds);
+    });
+
+    // 長考ボタン押下でタイマーに+設定値秒
+    btnChoukou.addEventListener('click', () => {
+        const addSeconds = parseInt(choukouSettingInput.value, 10) || 60;
+        socket.emit('addTime', addSeconds); // サーバー側で+addSeconds加算する処理が必要
     });
 
     // 終了ボタンが押されたらサーバーに通知＆東を赤字に戻す
