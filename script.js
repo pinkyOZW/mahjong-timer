@@ -205,4 +205,49 @@ document.addEventListener('DOMContentLoaded', () => {
             popupOverlay.style.display = 'none';
         }
     });
+
+    // --- 点数表ポップアップ機能の追加 ---
+    const scoreTableBtn = document.getElementById('score-table-btn');
+    const scoreTablePopup = document.getElementById('score-table-popup');
+    const scoreTableClose = document.getElementById('score-table-popup-close');
+    const scoreTableImg = document.getElementById('score-table-image');
+    const scoreTablePrev = document.getElementById('score-table-page-prev');
+    const scoreTableNext = document.getElementById('score-table-page-next');
+    const scoreTableIndicator = document.getElementById('score-table-page-indicator');
+
+    // 画像ファイル名（image1, image2, image3）
+    const scoreTableImages = ["image1", "image2", "image3"];
+    let scoreTablePage = 0;
+
+    function showScoreTablePage(idx) {
+        scoreTablePage = idx;
+        scoreTableImg.src = scoreTableImages[scoreTablePage];
+        scoreTableIndicator.textContent = (scoreTablePage + 1) + ' / ' + scoreTableImages.length;
+        scoreTablePrev.disabled = scoreTablePage === 0;
+        scoreTableNext.disabled = scoreTablePage === scoreTableImages.length - 1;
+    }
+
+    scoreTableBtn.addEventListener('click', () => {
+        scoreTablePopup.style.display = 'flex';
+        showScoreTablePage(0);
+    });
+
+    scoreTableClose.addEventListener('click', () => {
+        scoreTablePopup.style.display = 'none';
+    });
+
+    scoreTablePrev.addEventListener('click', () => {
+        if (scoreTablePage > 0) showScoreTablePage(scoreTablePage - 1);
+    });
+
+    scoreTableNext.addEventListener('click', () => {
+        if (scoreTablePage < scoreTableImages.length - 1) showScoreTablePage(scoreTablePage + 1);
+    });
+
+    // オーバーレイクリックで閉じる（中身クリックは閉じない）
+    scoreTablePopup.addEventListener('click', (e) => {
+        if (e.target === scoreTablePopup) {
+            scoreTablePopup.style.display = 'none';
+        }
+    });
 });

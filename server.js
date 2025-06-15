@@ -19,6 +19,17 @@ app.get('/image2', (req, res) => {
     res.sendFile(path.join(__dirname, 'img', 'yaku2.png'));
 });
 
+// 点数表画像のルーティング（img/score1.png, img/score2.png, img/score3.png を配置すること）
+app.get('/image3', (req, res) => {
+    res.sendFile(path.join(__dirname, 'img', 'score1.png'));
+});
+app.get('/image4', (req, res) => {
+    res.sendFile(path.join(__dirname, 'img', 'score2.png'));
+});
+app.get('/image5', (req, res) => {
+    res.sendFile(path.join(__dirname, 'img', 'score3.png'));
+});
+
 // サーバーの記憶領域（これが全員で共有されるデータ）
 let gameState = {
     scores: {
