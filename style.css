@@ -34,11 +34,14 @@ body {
     font-weight: bold;
     border: 4px solid #d00;
     border-radius: 18px;
-    padding: 38px 100px;
+    padding: 4vw 8vw;
     box-shadow: 0 4px 24px #0008;
     letter-spacing: 0.15em;
     text-align: center;
     user-select: none;
+    display: inline-block;
+    min-width: 40vw;
+    white-space: nowrap;
 }
 @keyframes fadein {
     from { opacity: 0; }
