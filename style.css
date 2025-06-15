@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: stretch;
-    align-items: stretch;
+    align-items: center;
     height: 100vh;
     min-height: 100vh;
     margin: 0;
@@ -21,12 +21,12 @@ body {
 .info-area,
 .board-area,
 .controls-area {
-    flex: 1 1 0;
+    flex: 0.1;
     display: flex;
     flex-direction: column;
     justify-content: center; /* 上下中央寄せ */
     align-items: center;     /* 左右中央寄せ */
-    width: 100%;
+    width: 95%;
     box-sizing: border-box;
 }
 .info-area {
@@ -38,7 +38,6 @@ body {
     min-height: 350px;
 }
 .controls-area {
-    min-height: 180px;
     margin-bottom: 12px;
 }
 
@@ -291,7 +290,7 @@ body {
 /* 長考ボタンの絶対位置（西スコアの右下に重ねる） */
 #btn-choukou {
     position: absolute;
-    left: 66%;
+    left: 70%;
     top: 71%;
     margin-top: 0;
     margin-left: 0;
