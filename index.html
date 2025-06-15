@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麻雀スコア＆タイマー (同期版)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-board">
+        <div class="player-score north">
+            <span class="wind-label">北</span>
+            <input type="number" class="score-input" value="25000" id="score-north">
+        </div>
+        <div class="player-score west">
+            <span class="wind-label">西</span>
+            <input type="number" class="score-input" value="25000" id="score-west">
+        </div>
+
+        <div id="timer-container">
+            <div id="timer-display">00:30</div>
+        </div>
+
+        <div class="player-score east">
+            <span class="wind-label">東</span>
+            <input type="number" class="score-input" value="25000" id="score-east">
+        </div>
+        <div class="player-score south">
+            <span class="wind-label">南</span>
+            <input type="number" class="score-input" value="25000" id="score-south">
+        </div>
+    </div>
+
+    <div class="controls">
+        <p>自分の風を選択してください:</p>
+        <button id="btn-east">東</button>
+        <button id="btn-south">南</button>
+        <button id="btn-west">西</button>
+        <button id="btn-north">北</button>
+        <hr>
+        <p>タイマー設定 (秒):</p>
+        <input type="number" id="timer-setting" value="30" min="1">
+        <button id="reset-timer-btn">タイマーリセット＆スタート</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

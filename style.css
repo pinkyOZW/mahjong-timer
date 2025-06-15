@@ -1,0 +1,102 @@
+:root {
+    --board-size: 80vmin; /* 画面の小さい方の80%を基準にする */
+    --font-size-large: calc(var(--board-size) / 8);
+    --font-size-medium: calc(var(--board-size) / 15);
+    --font-size-small: calc(var(--board-size) / 20);
+}
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#game-board {
+    position: relative;
+    width: var(--board-size);
+    height: var(--board-size);
+    transition: transform 0.5s ease-in-out; /* 回転を滑らかに */
+}
+
+#timer-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 40%;
+    border: 5px solid black;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* タップできることを示す */
+    background-color: white;
+}
+
+#timer-display {
+    font-size: var(--font-size-large);
+    font-weight: bold;
+}
+
+.player-score {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: var(--font-size-medium);
+    width: 30%;
+}
+
+.wind-label {
+    font-size: var(--font-size-small);
+    font-weight: bold;
+}
+
+.score-input {
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+/* 各プレイヤーの位置決め */
+.north { top: 0; left: 50%; transform: translateX(-50%); }
+.south { bottom: 0; left: 50%; transform: translateX(-50%); }
+.west { top: 50%; left: 0; transform: translateY(-50%); }
+.east { top: 50%; right: 0; transform: translateY(-50%); }
+
+
+/* プレイヤー視点による回転 */
+.view-south #game-board { transform: rotate(0deg); } /* 南家がデフォルト */
+.view-west #game-board { transform: rotate(90deg); }
+.view-north #game-board { transform: rotate(180deg); }
+.view-east #game-board { transform: rotate(270deg); }
+
+
+.controls {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+.controls button {
+    font-size: 16px;
+    padding: 5px 15px;
+    margin: 0 5px;
+}
+.controls input {
+    font-size: 16px;
+    width: 60px;
+    padding: 5px;
+}
