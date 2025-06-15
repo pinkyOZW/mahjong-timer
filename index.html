@@ -3,32 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>麻雀スコア＆タイマー (同期版)</title>
+    <title>麻雀スコア＆タイマー</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="game-board">
-        <div class="player-score north">
-            <span class="wind-label">北</span>
-            <input type="number" class="score-input" value="25000" id="score-north">
-        </div>
-        <div class="player-score west">
-            <span class="wind-label">西</span>
-            <input type="number" class="score-input" value="25000" id="score-west">
+        <div id="score-rotate-area">
+            <div class="player-score south">
+                <div class="score-inner">
+                    <span class="wind-label" data-wind="南">南</span>
+                    <input type="number" class="score-input" value="25000" id="score-south">
+                </div>
+            </div>
+            <div class="player-score east">
+                <div class="score-inner">
+                    <span class="wind-label" data-wind="東">東</span>
+                    <input type="number" class="score-input" value="25000" id="score-east">
+                </div>
+            </div>
+            <div class="player-score north">
+                <div class="score-inner">
+                    <span class="wind-label" data-wind="北">北</span>
+                    <input type="number" class="score-input" value="25000" id="score-north">
+                </div>
+            </div>
+            <div class="player-score west">
+                <div class="score-inner">
+                    <span class="wind-label" data-wind="西">西</span>
+                    <input type="number" class="score-input" value="25000" id="score-west">
+                </div>
+            </div>
         </div>
 
         <div id="timer-container">
             <div id="timer-display">00:30</div>
-        </div>
-
-        <div class="player-score east">
-            <span class="wind-label">東</span>
-            <input type="number" class="score-input" value="25000" id="score-east">
-        </div>
-        <div class="player-score south">
-            <span class="wind-label">南</span>
-            <input type="number" class="score-input" value="25000" id="score-south">
         </div>
     </div>
 
@@ -42,8 +51,33 @@
         <p>タイマー設定 (秒):</p>
         <input type="number" id="timer-setting" value="30" min="1">
         <button id="reset-timer-btn">タイマーリセット＆スタート</button>
+        <button id="stop-timer-btn">タイマーストップ</button>
     </div>
 
+    <script>
+    // 風ボタンに応じてタイマーとスコアエリアを回転
+    function setWindView(wind) {
+        // 各風に応じたクラス名
+        let viewClass = '';
+        switch (wind) {
+            case '東': viewClass = 'view-east'; break;
+            case '南': viewClass = 'view-south'; break;
+            case '西': viewClass = 'view-west'; break;
+            case '北': viewClass = 'view-north'; break;
+            default: viewClass = 'view-east';
+        }
+        document.body.classList.remove('view-east', 'view-south', 'view-west', 'view-north');
+        document.body.classList.add(viewClass);
+    }
+
+    document.getElementById('btn-east').addEventListener('click', () => setWindView('東'));
+    document.getElementById('btn-south').addEventListener('click', () => setWindView('南'));
+    document.getElementById('btn-west').addEventListener('click', () => setWindView('西'));
+    document.getElementById('btn-north').addEventListener('click', () => setWindView('北'));
+
+    // 初期状態は東
+    setWindView('東');
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>

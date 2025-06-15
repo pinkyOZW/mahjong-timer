@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerDisplay = document.getElementById('timer-display');
     const timerSettingInput = document.getElementById('timer-setting');
     const resetTimerBtn = document.getElementById('reset-timer-btn');
+    const stopTimerBtn = document.getElementById('stop-timer-btn');
     const body = document.body;
     
     const scoreInputs = {
@@ -21,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnWest = document.getElementById('btn-west');
     const btnNorth = document.getElementById('btn-north');
 
-    // ■ サーバーから最新の状態が送られてきた時の処理
     socket.on('stateUpdate', (gameState) => {
         // 点数を画面に反映
         scoreInputs.east.value = gameState.scores.east;
@@ -40,12 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
         timerSettingInput.value = gameState.timer.initialSeconds;
     });
 
-    // ■ 自分が何か操作した時に、サーバーにお願いする処理
-
     // リセットボタンが押されたら、サーバーに通知
     resetTimerBtn.addEventListener('click', () => {
         const newInitialSeconds = parseInt(timerSettingInput.value, 10);
         socket.emit('resetTimer', newInitialSeconds);
+    });
+
+    // ストップボタンが押されたらサーバーに通知
+    stopTimerBtn.addEventListener('click', () => {
+        socket.emit('stopTimer');
     });
 
     // 点数が変更されたら、サーバーに通知
@@ -61,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 視点切り替え（これは自分の画面だけでOKなのでサーバー通信なし）
+    // 視点切り替え（自分の画面だけでOKなのでサーバー通信なし）
     const setPlayerView = (wind) => {
         body.className = ''; // いったんクラスをリセット
         body.classList.add(`view-${wind}`);
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSouth.addEventListener('click', () => setPlayerView('south'));
     btnWest.addEventListener('click', () => setPlayerView('west'));
     btnNorth.addEventListener('click', () => setPlayerView('north'));
-    
+
     // 初期視点
-    setPlayerView('south');
+    setPlayerView('north');
 });

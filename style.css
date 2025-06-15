@@ -1,5 +1,5 @@
 :root {
-    --board-size: 80vmin; /* 画面の小さい方の80%を基準にする */
+    --board-size: 80vmin;
     --font-size-large: calc(var(--board-size) / 8);
     --font-size-medium: calc(var(--board-size) / 15);
     --font-size-small: calc(var(--board-size) / 20);
@@ -16,13 +16,23 @@ body {
     background-color: #f0f0f0;
 }
 
+/* board/timer layout */
 #game-board {
     position: relative;
     width: var(--board-size);
     height: var(--board-size);
-    transition: transform 0.5s ease-in-out; /* 回転を滑らかに */
+    /* transform指定はscore-rotate-areaに移動 */
 }
 
+#score-rotate-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* タイマー中央配置 */
 #timer-container {
     position: absolute;
     top: 50%;
@@ -30,20 +40,26 @@ body {
     transform: translate(-50%, -50%);
     width: 40%;
     height: 40%;
-    border: 5px solid black;
-    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer; /* タップできることを示す */
+    border: 5px solid black;
+    box-sizing: border-box;
     background-color: white;
 }
 
 #timer-display {
     font-size: var(--font-size-large);
     font-weight: bold;
+    /* タイマーの回転を0度にする */
+    /* transform: rotate(-90deg); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
+/* プレイヤー4方向配置 */
 .player-score {
     position: absolute;
     display: flex;
@@ -53,11 +69,24 @@ body {
     width: 30%;
 }
 
+.north { bottom: 0; left: 50%; transform: translateX(-50%); }
+.east  { top: 50%; right: 0; transform: translateY(-50%); }
+.south { top: 0; left: 50%; transform: translateX(-50%); }
+.west  { top: 50%; left: 0; transform: translateY(-50%); }
+
+/* 風ラベル */
 .wind-label {
     font-size: var(--font-size-small);
     font-weight: bold;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 5px;
+    display: flex;             /* 追加 */
+    justify-content: center;   /* 追加 */
+    align-items: center;       /* 追加 */
 }
 
+/* 点数入力 */
 .score-input {
     font-size: var(--font-size-medium);
     font-weight: bold;
@@ -69,20 +98,20 @@ body {
     box-sizing: border-box;
 }
 
-/* 各プレイヤーの位置決め */
-.north { top: 0; left: 50%; transform: translateX(-50%); }
-.south { bottom: 0; left: 50%; transform: translateX(-50%); }
-.west { top: 50%; left: 0; transform: translateY(-50%); }
-.east { top: 50%; right: 0; transform: translateY(-50%); }
+/* 回転は内側のscore-innerで打ち消す */
+.score-inner { transition: transform 0.5s ease-in-out; }
+.view-south .score-inner { transform: rotate(180deg); }
+.view-west .score-inner { transform: rotate(90deg); }
+.view-north .score-inner { transform: rotate(0deg); }
+.view-east .score-inner { transform: rotate(270deg); }
 
+/* プレイヤー視点による回転（score-rotate-areaだけ） */
+.view-north #score-rotate-area { transform: rotate(0deg); }
+.view-south #score-rotate-area { transform: rotate(180deg); }
+.view-east #score-rotate-area  { transform: rotate(90deg); }
+.view-west #score-rotate-area  { transform: rotate(-90deg); }
 
-/* プレイヤー視点による回転 */
-.view-south #game-board { transform: rotate(0deg); } /* 南家がデフォルト */
-.view-west #game-board { transform: rotate(90deg); }
-.view-north #game-board { transform: rotate(180deg); }
-.view-east #game-board { transform: rotate(270deg); }
-
-
+/* コントロールエリア */
 .controls {
     margin-top: 20px;
     text-align: center;
