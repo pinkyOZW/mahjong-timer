@@ -544,3 +544,17 @@ body {
     gap: 10px;
     margin-top: 10px;
 }
+
+/* --- 幅を均等にするための中央寄せ・最大幅指定 --- */
+.info-area,
+.board-area,
+.controls-area {
+    max-width: 600px;   /* 任意で幅を調整 */
+    margin-left: auto;
+    margin-right: auto;
+}
+/* board/timer の中央寄せも再強化 */
+#game-board {
+    margin-left: auto;
+    margin-right: auto;
+}
