@@ -22,8 +22,7 @@
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(60,40,10,0.10);
     padding: 10px 0;
-    font-size: 1.15em;
-    gap: 10px;
+    font-size: 1.0em;
 }
 .score-bar-player {
     display: flex;
@@ -82,7 +81,7 @@ body {
 .info-area,
 .board-area,
 .controls-area {
-    width: 100%;
+    width: 95%;
     box-sizing: border-box;
     flex: none;
     min-height: 0;
@@ -504,7 +503,7 @@ body {
     color: #fffbe8;
     font-size: 1.08em;
     position: relative;
-    width: 100%;
+    width: 95%;
     max-width: 520px;
 }
 .controls button {
