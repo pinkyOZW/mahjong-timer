@@ -13,12 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerContainer = document.getElementById('timer-container');
     const body = document.body;
 
-    // 盤面の点数入力は使わなくなるので、score-bar用に再取得
+    // スコアバー
     const scoreInputs = {
         east: document.getElementById('score-bar-east'),
         south: document.getElementById('score-bar-south'),
         west: document.getElementById('score-bar-west'),
         north: document.getElementById('score-bar-north'),
+    };
+    const playerNameInputs = {
+        east: document.getElementById('score-bar-name-east'),
+        south: document.getElementById('score-bar-name-south'),
+        west: document.getElementById('score-bar-name-west'),
+        north: document.getElementById('score-bar-name-north'),
     };
 
     // 風選択ボタン
@@ -34,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('label-west'),
         document.getElementById('label-north'),
     ];
-    let windIndex = 0; // 0:東, 1:南, 2:西, 3:北
+
+    // アクティブ風インデックス（0:東, 1:南, 2:西, 3:北）
+    let windIndex = 0;
 
     // ポップアップ表示・非表示制御
     function showTimeupPopup() {
@@ -59,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function closePopupHandler(e) {
         socket.emit('closeTimeupPopup');
-        // ポップアップはサーバーからの指示で消すのでここでは消さない
         e.preventDefault();
         e.stopPropagation();
     }
@@ -77,34 +84,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 初期状態で東を赤字
-    setActiveWind(0);
-
-    // --- 点数バーの値をセットする関数 ---
-    function setScoresToBar(scores) {
-        if (!scores) return;
-        scoreInputs.east.value = scores.east;
-        scoreInputs.south.value = scores.south;
-        scoreInputs.west.value = scores.west;
-        scoreInputs.north.value = scores.north;
+    // プレイヤー名をスコアバーとラベルに反映
+    function setPlayerNamesToBar(names) {
+        if (!names) return;
+        playerNameInputs.east.value = names.east;
+        playerNameInputs.south.value = names.south;
+        playerNameInputs.west.value = names.west;
+        playerNameInputs.north.value = names.north;
     }
-
-    // --- 点数バーの値を取得する関数 ---
-    function getScoresFromBar() {
+    function getPlayerNamesFromBar() {
         return {
-            east: parseInt(scoreInputs.east.value, 10) || 0,
-            south: parseInt(scoreInputs.south.value, 10) || 0,
-            west: parseInt(scoreInputs.west.value, 10) || 0,
-            north: parseInt(scoreInputs.north.value, 10) || 0,
+            east: playerNameInputs.east.value,
+            south: playerNameInputs.south.value,
+            west: playerNameInputs.west.value,
+            north: playerNameInputs.north.value,
         };
     }
 
     // サーバーからstateUpdate
     socket.on('stateUpdate', (gameState) => {
         // 点数をスコアバーに反映
-        setScoresToBar(gameState.scores);
+        scoreInputs.east.value = gameState.scores.east;
+        scoreInputs.south.value = gameState.scores.south;
+        scoreInputs.west.value = gameState.scores.west;
+        scoreInputs.north.value = gameState.scores.north;
 
-        // タイマーを画面に反映
+        // プレイヤー名も反映
+        setPlayerNamesToBar(gameState.playerNames);
+
+        // アクティブ風をラベルに反映
+        windIndex = typeof gameState.activeWind === "number" ? gameState.activeWind : 0;
+        setActiveWind(windIndex);
+
+        // タイマー表示
         const seconds = gameState.timer.secondsLeft;
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
@@ -138,14 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 赤字は東のまま
         windIndex = 0;
-        setActiveWind(windIndex);
+        socket.emit('updateActiveWind', windIndex);
     });
 
     // タイマー表示部クリックでタイマーリセット＋赤字進行（東→南→西→北→東ループ）
     timerDisplay.addEventListener('click', () => {
         windIndex++;
-        if (windIndex > 3) windIndex = 0; // 0:東, 1:南, 2:西, 3:北
-        setActiveWind(windIndex);
+        if (windIndex > 3) windIndex = 0;
+        socket.emit('updateActiveWind', windIndex);
 
         const initialSeconds = parseInt(timerSettingInput.value, 10);
         socket.emit('resetTimer', initialSeconds);
@@ -161,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     stopTimerBtn.addEventListener('click', () => {
         socket.emit('stopTimer');
         windIndex = 0;
-        setActiveWind(windIndex);
+        socket.emit('updateActiveWind', windIndex);
     });
 
     // 点数リセットボタンが押されたら点数を全員25000点に
@@ -173,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 west: 25000,
                 north: 25000,
             };
-            setScoresToBar(defaultScores);
             socket.emit('resetScore', defaultScores);
         });
     }
@@ -181,8 +192,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 点数バーが変更されたらサーバーに通知
     Object.values(scoreInputs).forEach(input => {
         input.addEventListener('change', () => {
-            const newScores = getScoresFromBar();
+            const newScores = {
+                east: parseInt(scoreInputs.east.value, 10),
+                south: parseInt(scoreInputs.south.value, 10),
+                west: parseInt(scoreInputs.west.value, 10),
+                north: parseInt(scoreInputs.north.value, 10),
+            };
             socket.emit('updateScore', newScores);
+        });
+    });
+
+    // プレイヤー名が変更されたらサーバーに通知
+    Object.values(playerNameInputs).forEach(input => {
+        input.addEventListener('change', () => {
+            const newNames = getPlayerNamesFromBar();
+            socket.emit('updatePlayerNames', newNames);
+        });
+        input.addEventListener('blur', () => {
+            const newNames = getPlayerNamesFromBar();
+            socket.emit('updatePlayerNames', newNames);
         });
     });
 
