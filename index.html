@@ -44,6 +44,26 @@
         </div>
     </div>
 
+    <!-- スコアバー（コントロールパネル上） -->
+    <div class="score-bar">
+        <div class="score-bar-player">
+            <span class="score-bar-label" id="score-bar-label-east">東</span>
+            <input type="number" class="score-bar-input" value="25000" id="score-bar-east">
+        </div>
+        <div class="score-bar-player">
+            <span class="score-bar-label" id="score-bar-label-south">南</span>
+            <input type="number" class="score-bar-input" value="25000" id="score-bar-south">
+        </div>
+        <div class="score-bar-player">
+            <span class="score-bar-label" id="score-bar-label-west">西</span>
+            <input type="number" class="score-bar-input" value="25000" id="score-bar-west">
+        </div>
+        <div class="score-bar-player">
+            <span class="score-bar-label" id="score-bar-label-north">北</span>
+            <input type="number" class="score-bar-input" value="25000" id="score-bar-north">
+        </div>
+    </div>
+
     <!-- ゲームボードエリア -->
     <div class="board-area">
         <div id="game-board">
@@ -51,25 +71,21 @@
                 <div class="player-score south">
                     <div class="score-inner">
                         <span class="wind-label" data-wind="南" id="label-south">南</span>
-                        <input type="number" class="score-input" value="25000" id="score-south">
                     </div>
                 </div>
                 <div class="player-score east">
                     <div class="score-inner">
                         <span class="wind-label active-wind" data-wind="東" id="label-east">東</span>
-                        <input type="number" class="score-input" value="25000" id="score-east">
                     </div>
                 </div>
                 <div class="player-score north">
                     <div class="score-inner">
                         <span class="wind-label" data-wind="北" id="label-north">北</span>
-                        <input type="number" class="score-input" value="25000" id="score-north">
                     </div>
                 </div>
                 <div class="player-score west">
                     <div class="score-inner west-inner">
                         <span class="wind-label" data-wind="西" id="label-west">西</span>
-                        <input type="number" class="score-input" value="25000" id="score-west">
                     </div>
                 </div>
             </div>

@@ -8,16 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const choukouSettingInput = document.getElementById('choukou-setting');
     const startTimerBtn = document.getElementById('start-timer-btn');
     const stopTimerBtn = document.getElementById('stop-timer-btn');
-    const resetScoreBtn = document.getElementById('reset-score-btn'); // 追加
+    const resetScoreBtn = document.getElementById('reset-score-btn');
     const btnChoukou = document.getElementById('btn-choukou');
-    const timerContainer = document.getElementById('timer-container'); // 追加
+    const timerContainer = document.getElementById('timer-container');
     const body = document.body;
 
+    // 盤面の点数入力は使わなくなるので、score-bar用に再取得
     const scoreInputs = {
-        east: document.getElementById('score-east'),
-        south: document.getElementById('score-south'),
-        west: document.getElementById('score-west'),
-        north: document.getElementById('score-north'),
+        east: document.getElementById('score-bar-east'),
+        south: document.getElementById('score-bar-south'),
+        west: document.getElementById('score-bar-west'),
+        north: document.getElementById('score-bar-north'),
     };
 
     // 風選択ボタン
@@ -79,12 +80,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初期状態で東を赤字
     setActiveWind(0);
 
+    // --- 点数バーの値をセットする関数 ---
+    function setScoresToBar(scores) {
+        if (!scores) return;
+        scoreInputs.east.value = scores.east;
+        scoreInputs.south.value = scores.south;
+        scoreInputs.west.value = scores.west;
+        scoreInputs.north.value = scores.north;
+    }
+
+    // --- 点数バーの値を取得する関数 ---
+    function getScoresFromBar() {
+        return {
+            east: parseInt(scoreInputs.east.value, 10) || 0,
+            south: parseInt(scoreInputs.south.value, 10) || 0,
+            west: parseInt(scoreInputs.west.value, 10) || 0,
+            north: parseInt(scoreInputs.north.value, 10) || 0,
+        };
+    }
+
+    // サーバーからstateUpdate
     socket.on('stateUpdate', (gameState) => {
-        // 点数を画面に反映
-        scoreInputs.east.value = gameState.scores.east;
-        scoreInputs.south.value = gameState.scores.south;
-        scoreInputs.west.value = gameState.scores.west;
-        scoreInputs.north.value = gameState.scores.north;
+        // 点数をスコアバーに反映
+        setScoresToBar(gameState.scores);
 
         // タイマーを画面に反映
         const seconds = gameState.timer.secondsLeft;
@@ -102,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             timerContainer.classList.remove('timer-danger');
         }
-        // ------------------------------------
     });
 
     // ポップアップ表示・非表示の同期
@@ -156,19 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 west: 25000,
                 north: 25000,
             };
+            setScoresToBar(defaultScores);
             socket.emit('resetScore', defaultScores);
         });
     }
 
-    // 点数が変更されたら、サーバーに通知
+    // 点数バーが変更されたらサーバーに通知
     Object.values(scoreInputs).forEach(input => {
         input.addEventListener('change', () => {
-            const newScores = {
-                east: parseInt(scoreInputs.east.value, 10),
-                south: parseInt(scoreInputs.south.value, 10),
-                west: parseInt(scoreInputs.west.value, 10),
-                north: parseInt(scoreInputs.north.value, 10),
-            };
+            const newScores = getScoresFromBar();
             socket.emit('updateScore', newScores);
         });
     });
