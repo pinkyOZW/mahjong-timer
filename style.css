@@ -97,7 +97,7 @@ body {
     margin-bottom: 0;
 }
 .board-area {
-    height: 60vh;
+    height: 45vh;
     min-height: 0;
 }
 .controls-area {
@@ -437,8 +437,8 @@ body {
     font-size: calc(var(--board-size) / 14);
     font-weight: bold;
     text-align: center;
-    width: 2.4em;
-    height: 2.4em;
+    width: 1.8em;
+    height: 1.8em;
     line-height: 2.4em;
     margin-bottom: 5px;
     display: flex;
