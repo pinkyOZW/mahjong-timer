@@ -38,11 +38,18 @@ let gameState = {
         west: 25000,
         north: 25000,
     },
+    playerNames: {
+        east: "1",
+        south: "2",
+        west: "3",
+        north: "4",
+    },
     timer: {
         isRunning: false,
         initialSeconds: 30,
         secondsLeft: 30,
-    }
+    },
+    activeWind: 0 // 0:東, 1:南, 2:西, 3:北
 };
 
 let timerInterval = null;
@@ -129,6 +136,18 @@ io.on('connection', (socket) => {
             west: 25000,
             north: 25000,
         };
+        io.emit('stateUpdate', gameState);
+    });
+
+    // プレイヤー名更新
+    socket.on('updatePlayerNames', (names) => {
+        gameState.playerNames = names;
+        io.emit('stateUpdate', gameState);
+    });
+
+    // アクティブ風（東南西北赤字）同期
+    socket.on('updateActiveWind', (windIndex) => {
+        gameState.activeWind = windIndex;
         io.emit('stateUpdate', gameState);
     });
 
